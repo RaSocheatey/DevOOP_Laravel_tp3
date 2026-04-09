@@ -21,13 +21,17 @@ pipeline {
         stage('Test'){
             steps {
                 echo 'Testing...'
-                // Using || true allows the pipeline to finish even if your lab database isn't ready
                 sh 'php artisan test || true'
             }
         }
         stage('Deploy'){
             steps {
+                echo 'Verifying Inventory File...'
+                // This checks if the file exists and shows its content in the log
+                sh 'ls -l inventory/hosts.ini && cat inventory/hosts.ini'
+                
                 echo 'Deploying to teacher server...'
+                // Use the -i flag and ensure the path is correct
                 sh 'ansible-playbook -i inventory/hosts.ini deploy.yml'
             }
         }
