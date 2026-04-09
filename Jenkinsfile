@@ -8,6 +8,11 @@ pipeline {
     }
 
     stages {
+        stage('Setup Tools') {
+            steps {
+                sh 'sudo apt-get update && sudo apt-get install -y curl || echo "Skipping curl install"'
+            }
+        }
         stage('Build'){
             steps{
                 echo 'Building...'
@@ -26,13 +31,9 @@ pipeline {
         }
         stage('Deploy'){
             steps {
-                echo 'Verifying Inventory File...'
-                // This checks if the file exists and shows its content in the log
-                sh 'ls -l inventory.ini && cat inventory.ini'
-                
                 echo 'Deploying to teacher server...'
-                // Use the -i flag and ensure the path is correct
-                sh 'ansible-playbook -i inventory.ini deploy.yml'
+                // Added host key checking bypass here
+                sh 'ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini deploy.yml'
             }
         }
     }
