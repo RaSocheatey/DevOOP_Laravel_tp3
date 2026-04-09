@@ -1,0 +1,13 @@
+- name: Deploy Laravel to Teacher Server
+  hosts: webserver
+  tasks:
+    - name: Create socheatey directory
+      file:
+        path: "/var/www/html/socheatey"
+        state: directory
+        mode: '0755'
+
+    - name: Copy project files
+      copy:
+        src: ./
+        dest: "/var/www/html/socheatey"
