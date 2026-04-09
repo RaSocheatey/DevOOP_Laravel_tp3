@@ -12,7 +12,6 @@
         src: "./"
         dest: "/var/www/html/socheatey/"
 
-    # THIS TASK FIXES THE 404
     - name: Create index.php bridge
       copy:
         dest: "/var/www/html/socheatey/index.php"
