@@ -9,5 +9,20 @@
 
     - name: Copy project files
       copy:
-        src: ./
-        dest: "/var/www/html/socheatey"
+        src: "./"
+        dest: "/var/www/html/socheatey/"
+
+    # THIS TASK FIXES THE 404
+    - name: Create index.php bridge
+      copy:
+        dest: "/var/www/html/socheatey/index.php"
+        content: |
+          <?php
+          require __DIR__.'/public/index.php';
+
+    - name: Set permissions for Nginx
+      file:
+        path: "/var/www/html/socheatey"
+        owner: www-data
+        group: www-data
+        recurse: yes
