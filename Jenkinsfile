@@ -1,9 +1,9 @@
 pipeline {
-    agent { label 'laravel' }
+    agent { label 'laravel' } 
     stages {
         stage('Setup Tools') {
             steps {
-                // Install curl safely for Telegram
+                // Now that we installed curl manually, this is just a safety check
                 sh 'apt-get update || true'
                 sh 'apt-get install -y curl || echo "Done"'
             }
@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Deploy'){
             steps {
-                // Keep the server happy by deleting heavy folders before sending
+                // Strip vendor/node_modules to save teacher's disk space
                 sh 'rm -rf vendor node_modules'
                 sh 'ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini deploy.yml'
             }
@@ -26,7 +26,8 @@ pipeline {
     }
     post {
         success {
-            sh 'curl -X POST https://api.telegram.org/bot8562338732:AAEonQH9tSU6pQ2cQuYp7lCC022NmHtvZK0/sendMessage -d chat_id=6084771232 -d text="✅ TP03 SUCCESS! http://178.128.93.188/socheatey"'
+            // Updated to the new ra_socheatey URL
+            sh 'curl -X POST https://api.telegram.org/bot8562338732:AAEonQH9tSU6pQ2cQuYp7lCC022NmHtvZK0/sendMessage -d chat_id=6084771232 -d text="✅ TP03 SUCCESS! http://178.128.93.188/ra_socheatey"'
         }
         failure {
             sh 'curl -X POST https://api.telegram.org/bot8562338732:AAEonQH9tSU6pQ2cQuYp7lCC022NmHtvZK0/sendMessage -d chat_id=6084771232 -d text="❌ TP03 Build Failed!"'

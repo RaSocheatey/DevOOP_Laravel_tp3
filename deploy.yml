@@ -1,27 +1,28 @@
 - name: Deploy Laravel to Teacher Server
   hosts: webserver
   tasks:
-    - name: Create socheatey directory
+    - name: Create ra_socheatey directory
       file:
-        path: "/var/www/html/socheatey"
+        path: "/var/www/html/ra_socheatey"
         state: directory
         mode: '0755'
 
     - name: Copy project files
       copy:
         src: "./"
-        dest: "/var/www/html/socheatey/"
+        dest: "/var/www/html/ra_socheatey/"
 
     - name: Create index.php bridge
       copy:
-        dest: "/var/www/html/socheatey/index.php"
+        dest: "/var/www/html/ra_socheatey/index.php"
         content: |
           <?php
           require __DIR__.'/public/index.php';
 
     - name: Set permissions for Nginx
       file:
-        path: "/var/www/html/socheatey"
+        path: "/var/www/html/ra_socheatey"
+        state: directory
         owner: www-data
         group: www-data
         recurse: yes
